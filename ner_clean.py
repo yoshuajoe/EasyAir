@@ -1,277 +1,179 @@
 import re
 import string, sys
 import string
+from viterbi import Viterbi
+from concluder import Concluder
 
-def tupling(filename):
-	lines = open(filename, "r")
-	sentence = []
-	lineCount = 0
-
-	# Read line by line
-	# Append it to sentence
-	# tupling sentence into token and type (dictionary based)
-	for line in lines:
-		dict = []
-		for sen in line.strip("\n").split(" "):
-			tmp = sen.split("=")
-			dict.append({"token":tmp[0], "type":tmp[1]})
-		lineCount = lineCount+1
-		sentence.append({"sentence":lineCount, "content":dict})
-	return sentence
-
-def extractState(dictios):
-	states = []
-	for sen in dictios:
-		for cont in sen['content']:
-			if cont['type'] not in states:
-				states.append(cont['type'])
-	return states
-
-def countStartProb(states, dictios):
-	result = []
-	for st in states:
-		counter = 0
-		for sen in dictios:
-			if sen['content'][0]['type'] == st:
-				counter = counter + 1
-		result.append({"state":st, "prob":(counter*1.00/len(dictios))})
-	return result
-
-def occurencesState(states, dictios):
-	occurences = []
-	for st in states:
-		wholeoccurence = 0
-		for sen in dictios:
-			for ct in sen['content']:
-				if ct['type'] == st:
-					wholeoccurence = wholeoccurence + 1
-		occurences.append({"state":st, "occurences":wholeoccurence})
-	return occurences
-
-def coocurrences(dictios, states, occurencesSt):
-	stOccur = []
-	result = []
-	tmp = []
-	# map 
-	for sen in dictio:
-		for a in range(0, len(sen['content'])):
-			if(a < (len(sen['content'])-1)):
-					stOccur.append({"state_x":sen['content'][a]['type'], "state_y":sen['content'][a+1]['type']})
-	# reduce
-	for di in stOccur:
-		count = 0
-		flag = True
-		#print("DI ",di)
-		if len(tmp) > 0:
-			for x in tmp:
-				if (di["state_x"] == x["state_x"]) and (di["state_y"] == x["state_y"]):
-					#print("X ",x)
-					#print("cocok")
-					flag = False
-					break;
+class NER(object):
+	def __init__(self, observ_file="ori_corp.txt", dictio_file="anno_corp.txt"):
+		self.dictio = []
+		self.state = []
+		self.startProb = []
+		self.occurencesSt = []
+		self.bow = []
+		self.transSt = []
+		self.emission = []
 		
-		if flag == True:
-			#print("Hitung")
-			for din in stOccur:
-				if di == din:
-					count = count + 1
-			for ost in occurencesSt:
-				if ost["state"] == di["state_x"]:
-					azt = ost["occurences"]
-			
-			result.append({"pair":di, "count":(count*1.00/azt)})
-			tmp.append(di)
-	
-	sementara = []
-	for st in states:
-		for st2 in states:
-			sementara.append({"pair":{"state_x":st, "state_y":st2}, "count":0})
-	
-	for res in result:
-		for sem in sementara:
-			if (sem["pair"]["state_x"] == res["pair"]["state_x"]) and (sem["pair"]["state_y"] == res["pair"]["state_y"]):
-				sementara.remove(sem)
+	def tupling(self, filename):
+		lines = open(filename, "r")
+		sentence = []
+		lineCount = 0
 
-	for sem in sementara:
-		result.append(sem)
-	
-	return result
+		# Read line by line
+		# Append it to sentence
+		# tupling sentence into token and type (dictionary based)
+		for line in lines:
+			dict = []
+			for sen in line.strip("\n").split(" "):
+				tmp = sen.split("=")
+				dict.append({"token":tmp[0], "type":tmp[1]})
+			lineCount = lineCount+1
+			sentence.append({"sentence":lineCount, "content":dict})
+		return sentence
 
-def bagOfWord(dictios):
-	tmp = []
-	for sen in dictios:
-		for w in sen["content"]:
-			if w["token"] not in tmp:
-				tmp.append(w["token"])
-	return tmp
-	
-def countEmission(dictios, states, occurencesStates, bows):
-	result = []
-	for b in bows:
+	def extractState(self):
+		states = []
+		for sen in self.dictio:
+			for cont in sen['content']:
+				if cont['type'] not in states:
+					states.append(cont['type'])
+		return states
+
+	def countStartProb(self):
+		result = []
+		for st in self.state:
+			counter = 0
+			for sen in self.dictio:
+				if sen['content'][0]['type'] == st:
+					counter = counter + 1
+			result.append({"state":st, "prob":(counter*1.00/len(self.dictio))})
+		return result
+
+	def occurencesState(self):
+		occurences = []
+		for st in self.state:
+			wholeoccurence = 0
+			for sen in self.dictio:
+				for ct in sen['content']:
+					if ct['type'] == st:
+						wholeoccurence = wholeoccurence + 1
+			occurences.append({"state":st, "occurences":wholeoccurence})
+		return occurences
+
+	def coocurrences(self):
+		stOccur = []
+		result = []
 		tmp = []
-		for st in states:
+		# map 
+		for sen in self.dictio:
+			for a in range(0, len(sen['content'])):
+				if(a < (len(sen['content'])-1)):
+						stOccur.append({"state_x":sen['content'][a]['type'], "state_y":sen['content'][a+1]['type']})
+		# reduce
+		for di in stOccur:
 			count = 0
-			azt = 0;
-			for sen in dictios:
-				for d in sen["content"]:
-					if b == d["token"] and st == d["type"]:
+			flag = True
+			if len(tmp) > 0:
+				for x in tmp:
+					if (di["state_x"] == x["state_x"]) and (di["state_y"] == x["state_y"]):
+						flag = False
+						break;
+			
+			if flag == True:
+				for din in stOccur:
+					if di == din:
 						count = count + 1
-			for ost in occurencesStates:
-				if ost["state"] == st:
-					azt = ost["occurences"]
-			tmp.append({"state":st, "prob":(count*1.00/azt)})
-		result.append({"word":b, "content":tmp})
-	return result
+				for ost in self.occurencesSt:
+					if ost["state"] == di["state_x"]:
+						azt = ost["occurences"]
+				
+				result.append({"pair":di, "count":(count*1.00/azt)})
+				tmp.append(di)
+		
+		sementara = []
+		for st in self.state:
+			for st2 in self.state:
+				sementara.append({"pair":{"state_x":st, "state_y":st2}, "count":0})
+		
+		for res in result:
+			for sem in sementara:
+				if (sem["pair"]["state_x"] == res["pair"]["state_x"]) and (sem["pair"]["state_y"] == res["pair"]["state_y"]):
+					sementara.remove(sem)
 
-def getStartProbVal(keys, list):
-	for str in list:
-		if str["state"] == keys:
-			return str["prob"]
+		for sem in sementara:
+			result.append(sem)
+		
+		return result
 
-def getEmitVal(obs, stat, emit):
-	for ob in emit:
-		if ob["word"] == obs:
-			for st in ob["content"]:
-				if st["state"] == stat:
-					return st["prob"]
+	def bagOfWord(self):
+		tmp = []
+		for sen in self.dictio:
+			for w in sen["content"]:
+				if w["token"] not in tmp:
+					tmp.append(w["token"])
+		return tmp
+		
+	def countEmission(self):
+		result = []
+		for b in self.bow:
+			tmp = []
+			for st in self.state:
+				count = 0
+				azt = 0;
+				for sen in self.dictio:
+					for d in sen["content"]:
+						if b == d["token"] and st == d["type"]:
+							count = count + 1
+				for ost in self.occurencesSt:
+					if ost["state"] == st:
+						azt = ost["occurences"]
+				tmp.append({"state":st, "prob":(count*1.00/azt)})
+			result.append({"word":b, "content":tmp})
+		return result
 
-def getTransVal(statx, staty, trans):
-	for tr in trans:
-		if tr["pair"]["state_x"] == statx and tr["pair"]["state_y"] == staty:
-			return tr["count"]
-					
-def viterbi(obs, states, start_p, trans_p, emit_p):
-    V = [{}]
-    path = {}
-    
-    # Initialize base cases (t == 0)
-    for y in states:
-        V[0][y] = getStartProbVal(y, start_p) * getEmitVal(obs[0], y, emit_p)
-        path[y] = [y]
-    
-    # Run Viterbi for t > 0
-    for t in range(1, len(obs)):
-        V.append({})
-        newpath = {}
-        for y in states:
-            #print(getEmitVal('dimana', y, emit_p))
-            #print(obs[t])
-            #print(getEmitVal(obs[t], y, emit_p))
-            (prob, state) = max((V[t-1][y0] * getTransVal(y0, y, trans_p) * getEmitVal(obs[t], y, emit_p), y0) for y0 in states)
-            V[t][y] = prob
-            newpath[y] = path[state] + [y]
-
-        # Don't need to remember the old paths
-        path = newpath
-    n = 0           # if only one element is observed max is sought in the initialization values
-    if len(obs) != 1:
-        n = t
-    #print_dptable(V)
-    (prob, state) = max((V[n][y], y) for y in states)
-    return (prob, path[state])
-
-# Don't study this, it just prints a table of the steps.
-def print_dptable(V):
-    s = "    " + " ".join(("%7d" % i) for i in range(len(V))) + "\n"
-    for y in V[0]:
-        s += "%.5s: " % y
-        s += " ".join("%.7s" % ("%f" % v[y]) for v in V)
-        s += "\n"
-    print(s)
-
-def triples(lso):
-	tripo = []
-	flagS = False
-	flagV = False
-	flagO = False
-	flagA = False
-	a = None
-	b = None
-	c = None
-	d = None
+	def extractObs(self, sentence):
+		gl = []
+		for ty in sentence.split(" "):
+			ty = ty.replace(",","")
+			ty = ty.replace(".","")
+			ty = ty.strip()
+			gl.append(ty)
+		return tuple(gl)
 	
-	for l in lso:
-		if l[0] == "PER" and flagS == False:
-			a = l[1]
-			flagS = True
-		elif l[0] == "VERB" and flagV == False:
-			b = l[1]
-			flagV = True
-		elif l[0] == "THINGS" and flagO == False:
-			c = l[1]
-			flagO = True
-		elif l[0] == "LOC" and flagA == False:
-			d = l[1]
-			flagA = True
-	tripo.append((a,b,c,d))
-	return tripo
-
-
-def concluder(states, sta, obs):
-	concluder = []
-	for sp in states:
-		counter = 0
-		for res in sta:
-			counter = counter + 1
-			if sp == res:
-				concluder.append((sp, obs[counter-1]))
-	return concluder
-
-def eval(t, e):
-	search = 0
-	for u in e:
-		if u[0]=="QMTHINGS":
-			fl = triples(t)
-			search = 2
-			return fl[0][search]
-		elif u[0]=="QMLOC":
-			search = 3
-			fl = triples(t)
-			return fl[0][search]
-		elif u[0]=="QMSUB":
-			search = 0
-			fl = triples(t)
-			return fl[0][search]
-	return "I don't know"
-
-def enres(self, str, txt):
+	def callViterbi(self, observations):
+		vit = Viterbi()
+		tvit = vit.execute(observations, self.state, self.startProb, self.transSt, self.emission)
+		probs = tvit[0]
+		state_res = tvit[1]
+		return (probs, state_res)
 	
-
-wordAsk = None
-for sy in sys.argv:
-	so = sy.split("=")
-	if so[0] == "-ask":
-		wordAsk = so[1]
-asdf = open("ori_corp.txt", "r") 
-gl = []
-for hj in asdf:
-	hj = hj.strip("\n")
-	for ty in hj.split(" "):
-		gl.append(ty)
-
-observations = tuple(gl)
-dictio = tupling("anno_corp.txt")
-state = extractState(dictio)
-startProb = countStartProb(state, dictio)
-occurencesSt = occurencesState(state, dictio)
-bow = bagOfWord(dictio)
-transSt = coocurrences(dictio, state, occurencesSt)
-emission = countEmission(dictio, state, occurencesSt, bow)
-(probs, state_res) = viterbi(observations, state, startProb, transSt, emission)
-#print(vit)
-concluders = concluder(state, state_res, observations)
-trip = triples(concluders)	
-asked = "apa yang saya makan ?"
-#w = 
-w = tuple(wordAsk.strip("\n").split(" "))
-(probss, state_ress) = viterbi(w, state, startProb, transSt, emission)
-concluderAsked = concluder(state, state_ress, w)
-#print(concluderAsked)
-tripAsked = triples(concluderAsked)
-
-print(wordAsk.replace("\\t", " "))
-print(eval(concluders, concluderAsked).replace("\\t", " "))		
-
-
-#print(sorted(concluder, key=lambda x:x[0]))
-
+	def loadSentence(self, filename):
+		asdf = open(filename, "r").read()
+		hasil = re.split("(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", asdf)
+		res = []
+		for has in hasil:
+			has = has.replace('\n', ' ').replace('.','').strip()
+			res.append(has)
+		return res	
+		
+	def train(self, dictio_file):
+		self.dictio = self.tupling(dictio_file)
+		self.state = self.extractState()
+		self.startProb = self.countStartProb()
+		self.occurencesSt = self.occurencesState()
+		self.bow = self.bagOfWord()
+		self.transSt = self.coocurrences()
+		self.emission = self.countEmission()
+		return {'dictionary':self.dictio, 'state':self.state, 'start_probability':self.startProb, 'transition': self.transSt, 'emission':self.emission}
+	
+	def recall(self, observe_file):
+		raw_observations = self.loadSentence(observe_file)
+		result = []
+		for sentence in raw_observations:
+			observations =  self.extractObs(sentence)
+			#print(observations)
+			(probs, state_res) = self.callViterbi(observations)
+			concluder = Concluder()
+			conc = concluder.conc(self.state, state_res, observations)
+			result.append(conc)
+		return result
