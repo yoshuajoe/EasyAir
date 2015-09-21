@@ -15,6 +15,13 @@ di=OTHER sana=OTHER terjadi=OTHER kebakaran=EVENT
 saya=PER makan=VERB jeruk=FRUIT di=OTHER London=LOC
 siapa=QMSUB yang=OTHER makan=VERB jeruk=FRUIT
 siapa=QMSUB nama=NAME Direktur\tbadan\tkebudayaan\tPBB\t(UNESCO)=THINGS ?=OTHER
+Direktur\tbadan\tkebudayaan\tPBB\t(UNESCO)=THINGS siapa=QMSUB ?=OTHER
+siapa=QMSUB yang=OTHER bermain=VERB di=OTHER lapangan=LOC ?=OTHER
+siapa=QMSUB nama=NAME wanita=PER itu=OTHER ?=OTHER
+siapa=QMSUB Ketua\tDPR=THINGS ?=OTHER
+siapa=QMSUB Ketua\tDPR=THINGS ?=OTHER
+siapa=QMSUB Ketua\tDPR=THINGS ?=OTHER
+siapa=QMSUB Ketua\tDPR=THINGS ?=OTHER
 Irina\tBokova=PER adalah=VERB Direktur\tbadan\tkebudayaan\tPBB\t(UNESCO)=THINGS
 Irina\tBokova=PER mengatakan=VERB situs-situs\tarkeologi=THINGS di=OTHER Suriah=LOC
 situs-situs\tarkeologi=THINGS dijarah=VERB secara=OTHER besar-besaran=OTHER oleh=OTHER kelompok=OTHER yang=OTHER menamakan=OTHER diri=OTHER Negara\tIslam\tatau\tISIS=PER

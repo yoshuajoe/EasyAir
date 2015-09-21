@@ -234,6 +234,9 @@ def eval(t, e):
 			return fl[0][search]
 	return "I don't know"
 
+def enres(self, str, txt):
+	
+
 wordAsk = None
 for sy in sys.argv:
 	so = sy.split("=")
