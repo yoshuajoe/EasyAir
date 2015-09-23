@@ -1,4 +1,8 @@
 Kelompok=ORG Hamas=ORG yang=OTHER menguasai=VERB Jalur=THINGS Gaza=THINGS Hamas=ORG mengklaim=VERB berhasil=INFO menangkap=INFO sebuah=MEA pesawat=THINGS nirawak=THINGS atau=OTHER drone=THINGS milik=OTHER Israel=ORG
 Pesawat=THINGS tersebut=THINGS ditangkap=PAS_VERB di=IN wilayah=LOC utara=LOC Jalur=LOC Gaza=LOC dan=OTHER
+Albert=PER Einstein=PER menaiki=VERB pesawat=THINGS tersebut=THINGS
+Einstein=PER makan=VERB nasi=THINGS
+A=PER Einstein=PER makan=VERB nasi=THINGS goreng=THINGS
+Dia=PER sangat=OTHER menyukai=VERB nasi=THINGS
 Pesawat=THINGS tersebut=THINGS menjadi=VERB insiden=THINGS yang=OTHER kedua=MEA kalinya=MEA terjadi=VERB dalam=IN dua=MEA bulan=MEA terakhir=OTHER
 Pesawat=THINGS nirawak=THINGS atau=OTHER drone=THINGS milik=VERB Israel=ORG ini=OTHER disergap=PAS_VERB oleh=BY sayap=ORG militer=ORG kelompok=ORG Hamas=ORG Birgade=PER Ezzedine=PER al-Qassam=PER
