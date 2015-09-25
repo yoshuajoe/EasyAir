@@ -151,9 +151,23 @@ class NER(object):
 		asdf = open(filename, "r").read()
 		hasil = re.split("(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s", asdf)
 		res = []
+		temps = ""
 		for has in hasil:
 			has = has.replace('\n', ' ').replace('.','').strip()
-			res.append(has)
+			if len(has.split(" ")) < 2:
+				print(temps)
+				if not temps:
+					temps = temps + has
+				else:
+					temps = temps + " " + has	
+			else:
+				if not temps:
+					has = temps + has
+				else:
+					has = temps + " " +has
+				temps = ""
+				res.append(has)
+		print(res)
 		return res	
 		
 	def train(self, dictio_file):

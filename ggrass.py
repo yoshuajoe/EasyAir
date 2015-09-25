@@ -79,9 +79,48 @@ for bg in bigres2:
 	str = str[0:len(str)-1]
 	str = str +". "
 
-print(str)
+#print(str)
 #coreference matcher
 #sorry i skip this due to laziness in reading paper
 
+#print(bigres2[7])
 
-#split coordinating conjunction
+capture = []
+stemp = []
+
+# capture all composed sentence
+for bg in bigres2:
+	for b in bg:
+		if b[0] == "AND":
+			capture.append(bg)
+			break
+
+			
+			
+# process AND
+for capt in capture:
+	index = 0
+	restofword = []
+	newsen = []
+	for c in range(len(capt)):
+		if capt[c][0] == "AND":
+			index = c
+			
+	for c in range(len(capt)):
+		if c != index and c != index-1 and c != index+1:
+			restofword.append(c)
+	
+	copyrest = restofword
+	newsen.append(copyrest+[index-1])
+	newsen.append(copyrest+[index+1])
+	
+	bigres2.remove(capt)
+	
+	for d in newsen:
+		newsen2bg = []
+		for n in sorted(d, reverse=False):
+			newsen2bg.append(capt[n])
+		bigres2.append(newsen2bg)
+	
+	
+print(bigres2)
