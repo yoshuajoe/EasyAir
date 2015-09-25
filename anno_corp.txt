@@ -3,7 +3,7 @@ Pesawat=THINGS tersebut=THINGS ditangkap=PAS_VERB di=IN wilayah=LOC utara=LOC Ja
 Albert=PER Einstein=PER menaiki=VERB pesawat=THINGS tersebut=THINGS
 Einstein=PER makan=VERB nasi=THINGS
 A=PER Einstein=PER makan=VERB nasi=THINGS goreng=THINGS
-Einstein=PER dan=AND Aldi=PER menyukai=VERB mangga=THING
+Einstein=PER dan=AND Aldi=PER menyukai=VERB mangga=THING dan=AND jeruk=THINGS
 Dia=PER sangat=OTHER menyukai=VERB nasi=THINGS
 Pesawat=THINGS tersebut=THINGS menjadi=VERB insiden=THINGS yang=OTHER kedua=MEA kalinya=MEA terjadi=VERB dalam=IN dua=MEA bulan=MEA terakhir=OTHER
 Pesawat=THINGS nirawak=THINGS atau=OTHER drone=THINGS milik=VERB Israel=ORG ini=OTHER disergap=PAS_VERB oleh=BY sayap=ORG militer=ORG kelompok=ORG Hamas=ORG Birgade=PER Ezzedine=PER al-Qassam=PER

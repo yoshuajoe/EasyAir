@@ -1,6 +1,7 @@
 from ner_clean import NER
 from concluder import Concluder
 from difflib import SequenceMatcher
+import itertools
 import re
 
 ner = NER()
@@ -19,12 +20,11 @@ for i in range(len(newsen)):
 		for k in sun[i]:
 			if j==k[1]:
 				res.append((k[0], j))
+				break
 	bigres.append(res)
-#print(bigres)
+
 bigres2 = []
 for g in bigres:
-	#lambd = lambda x,y:((x[1]+" "+y[1]),x[0]) if (x[0]==y[0]) else x
-	#print(reduce(lambd, g))
 	res = []
 	indexer=[]
 	for d in range(len(g)-1):
@@ -99,22 +99,38 @@ for bg in bigres2:
 			
 # process AND
 for capt in capture:
-	index = 0
+	index = []
 	restofword = []
 	newsen = []
+	lst = []
+	s_and = []
+	
+	for rst in range(len(capt)):
+		restofword.append(rst)
+	
 	for c in range(len(capt)):
 		if capt[c][0] == "AND":
-			index = c
+			index.append(c)
+	
+	for ind in index:
+		s_and.append([ind-1,ind+1])
+		restofword.remove(ind-1)
+		restofword.remove(ind+1)
+		restofword.remove(ind)
+	
+	res_and = []
+	if len(s_and) > 1:
+		for hg in range(len(s_and)-1):
+			s_and[hg+1] = list(itertools.product(s_and[hg], s_and[hg+1]))
+			s_and.remove(s_and[hg])
 			
-	for c in range(len(capt)):
-		if c != index and c != index-1 and c != index+1:
-			restofword.append(c)
-	
-	copyrest = restofword
-	newsen.append(copyrest+[index-1])
-	newsen.append(copyrest+[index+1])
-	
-	bigres2.remove(capt)
+	for s_a in s_and:
+		for sa in s_a:
+			sa = list(sa)
+			for rsr in restofword:
+				sa.append(rsr)
+			newsen.append(sa)
+	#print(newsen)
 	
 	for d in newsen:
 		newsen2bg = []
@@ -122,5 +138,6 @@ for capt in capture:
 			newsen2bg.append(capt[n])
 		bigres2.append(newsen2bg)
 	
+	bigres2.remove(capt)
 	
 print(bigres2)
