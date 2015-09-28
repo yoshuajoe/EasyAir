@@ -1,6 +1,7 @@
 from ner_clean import NER
 from concluder import Concluder
 from difflib import SequenceMatcher
+from proc_conj_AND import ProcAND
 import itertools
 import re
 
@@ -79,65 +80,11 @@ for bg in bigres2:
 	str = str[0:len(str)-1]
 	str = str +". "
 
+pAND = ProcAND()
+print(pAND.proceed(bigres2))
+
 #print(str)
 #coreference matcher
 #sorry i skip this due to laziness in reading paper
 
-#print(bigres2[7])
-
-capture = []
-stemp = []
-
-# capture all composed sentence
-for bg in bigres2:
-	for b in bg:
-		if b[0] == "AND":
-			capture.append(bg)
-			break
-
-			
-			
-# process AND
-for capt in capture:
-	index = []
-	restofword = []
-	newsen = []
-	lst = []
-	s_and = []
-	
-	for rst in range(len(capt)):
-		restofword.append(rst)
-	
-	for c in range(len(capt)):
-		if capt[c][0] == "AND":
-			index.append(c)
-	
-	for ind in index:
-		s_and.append([ind-1,ind+1])
-		restofword.remove(ind-1)
-		restofword.remove(ind+1)
-		restofword.remove(ind)
-	
-	res_and = []
-	if len(s_and) > 1:
-		for hg in range(len(s_and)-1):
-			s_and[hg+1] = list(itertools.product(s_and[hg], s_and[hg+1]))
-			s_and.remove(s_and[hg])
-			
-	for s_a in s_and:
-		for sa in s_a:
-			sa = list(sa)
-			for rsr in restofword:
-				sa.append(rsr)
-			newsen.append(sa)
-	#print(newsen)
-	
-	for d in newsen:
-		newsen2bg = []
-		for n in sorted(d, reverse=False):
-			newsen2bg.append(capt[n])
-		bigres2.append(newsen2bg)
-	
-	bigres2.remove(capt)
-	
 print(bigres2)
