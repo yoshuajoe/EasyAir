@@ -1,0 +1,92 @@
+{
+  "axes": [],
+  "data": [
+    {
+      "name": "table",
+      "values": [
+        {
+          "col": "data",
+          "idx": "negative (7.51430704155 percents)",
+          "val": 302
+        },
+        {
+          "col": "data",
+          "idx": "neutral (86.8375217716 percents)",
+          "val": 3490
+        },
+        {
+          "col": "data",
+          "idx": "positive (5.64817118686 percents)",
+          "val": 227
+        }
+      ]
+    }
+  ],
+  "height": 500,
+  "legends": [
+    {
+      "fill": "color",
+      "offset": 0,
+      "properties": {},
+      "title": "Sentiment Analysis"
+    }
+  ],
+  "marks": [
+    {
+      "from": {
+        "data": "table",
+        "transform": [
+          {
+            "type": "pie",
+            "value": "data.val"
+          }
+        ]
+      },
+      "properties": {
+        "enter": {
+          "endAngle": {
+            "field": "endAngle"
+          },
+          "fill": {
+            "field": "data.idx",
+            "scale": "color"
+          },
+          "innerRadius": {
+            "value": 0
+          },
+          "outerRadius": {
+            "value": 250
+          },
+          "startAngle": {
+            "field": "startAngle"
+          },
+          "stroke": {
+            "value": "white"
+          },
+          "x": {
+            "group": "width",
+            "mult": 0.5
+          },
+          "y": {
+            "group": "height",
+            "mult": 0.5
+          }
+        }
+      },
+      "type": "arc"
+    }
+  ],
+  "padding": "auto",
+  "scales": [
+    {
+      "domain": {
+        "data": "table",
+        "field": "data.idx"
+      },
+      "name": "color",
+      "range": "category10",
+      "type": "ordinal"
+    }
+  ],
+  "width": 960
+}

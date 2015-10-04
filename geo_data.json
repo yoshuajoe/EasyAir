@@ -1,0 +1,47 @@
+{
+    "type": "FeatureCollection", 
+    "features": [
+        {
+            "geometry": {
+                "type": "Point", 
+                "coordinates": [
+                    106.44982, 
+                    -3.0135
+                ]
+            }, 
+            "type": "Feature", 
+            "properties": {
+                "text": "Apalagi klo ambisi berkuasa sdh di ubun.\"@SuaraPembaruan: Mahfud Prediksi 60 Persen Pilkada 2015 Bersengketa http://t.co/2k2DXeDtWF\"", 
+                "created_at": "Sat Oct 03 09:50:26 +0000 2015"
+            }
+        }, 
+        {
+            "geometry": {
+                "type": "Point", 
+                "coordinates": [
+                    123.59018326, 
+                    -10.21255714
+                ]
+            }, 
+            "type": "Feature", 
+            "properties": {
+                "text": "Mahfud MD Prediksi 60Persenn Pilkada 2015 Bersengketa: Politik uang tersebut, menurut dia,\u2026 http://t.co/5uw6gBvYRR http://t.co/d8zuxx9MwT", 
+                "created_at": "Sat Oct 03 11:26:04 +0000 2015"
+            }
+        }, 
+        {
+            "geometry": {
+                "type": "Point", 
+                "coordinates": [
+                    107.040903, 
+                    -6.7273283
+                ]
+            }, 
+            "type": "Feature", 
+            "properties": {
+                "text": "Waduh no politik kitu!! @Bobotoh: Goblog siamah \"PERSIB AING\" dibabawa kana pilkada.. PERSIB LEUWIH GEDE TIBATAN CALON BUPATI!!!\"", 
+                "created_at": "Sun Oct 04 03:14:45 +0000 2015"
+            }
+        }
+    ]
+}
