@@ -47,7 +47,11 @@ class Normalizer(object):
       newTweet = map(lambda x:self.lowerCast(x), tweetWords)
       newTweet = map(lambda x:self.normDict[x] if x in self.normDict else x, newTweet)
 	  #url removal
+<<<<<<< HEAD
       newTweet = filter(lambda x:'http://' not in x and 'https://' not in x, newTweet)
+=======
+      newTweet = filter(lambda x:'http://' not in x, newTweet)
+>>>>>>> c8fe1487c14bbabcf0aea6bb89f3b928218a02ef
       return self.arrStrToSnt(newTweet)
 	  
 	  
